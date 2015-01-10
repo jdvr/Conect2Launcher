@@ -5,15 +5,41 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity" >
 
-    <Button
-        android:id="@+id/bt_show_apps"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+    <LinearLayout
+        android:id="@+id/ll_clock_container"
+        android:orientation="horizontal"
         android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
-        android:text="@string/show_apps"
-        android:onClick="ShowApps"
-        />
+        android:layout_alignParentLeft="true"
+        android:padding="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_hour"
+                android:layout_width="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="70sp"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_minutes_seg"
+                android:layout_width="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="70sp"
+                android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/gv_apps"
+        android:padding="10dp"
+        android:layout_below="@id/ll_clock_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:numColumns="2"
+        android:columnWidth="110dp"
+    />
+
+
+
 
 </RelativeLayout>

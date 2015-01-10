@@ -7,7 +7,7 @@
         android:duration="500"
         android:fromXScale="0.0"
         android:fromYScale="0.0"
-        android:toXScale="1.0"
-        android:toYScale="1.0" />
+        android:toXScale="0.9"
+        android:toYScale="0.9" />
 
 </set>
