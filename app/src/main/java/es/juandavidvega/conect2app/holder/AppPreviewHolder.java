@@ -1,12 +1,11 @@
-package es.juandavidvega.simplelauncher;
+package es.juandavidvega.conect2app.holder;
 
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import es.juandavidvega.simplelauncher.holder.AppPreview;
+import es.juandavidvega.conect2app.R;
 
 public class AppPreviewHolder {
     private TextView label;
@@ -21,7 +20,6 @@ public class AppPreviewHolder {
 
     public void fillView(AppPreview appPreview) {
         label.setText(appPreview.getLabel());
-        Log.d("Fil", label.getText() + "");
         icon.setImageDrawable(appPreview.getIcon());
     }
 

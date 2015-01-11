@@ -1,4 +1,4 @@
-package es.juandavidvega.simplelauncher.holder;
+package es.juandavidvega.conect2app.holder;
 
 import android.graphics.drawable.Drawable;
 

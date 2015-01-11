@@ -1,13 +1,9 @@
-package es.juandavidvega.simplelauncher.widgets;
+package es.juandavidvega.conect2app.widgets;
 
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
-
-import java.util.List;
-
-import es.juandavidvega.simplelauncher.holder.AppPreview;
 
 public class AppsWidget {
 

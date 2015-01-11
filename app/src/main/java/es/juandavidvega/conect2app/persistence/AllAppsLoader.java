@@ -1,4 +1,4 @@
-package es.juandavidvega.simplelauncher;
+package es.juandavidvega.conect2app.persistence;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,14 +8,15 @@ import android.content.pm.ResolveInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.juandavidvega.simplelauncher.holder.AppPreview;
+import es.juandavidvega.conect2app.holder.AppPreview;
 
-public class AppLoader {
+public class AllAppsLoader implements AppLoader {
     private  final Context context;
-    public AppLoader(Context context) {
+    public AllAppsLoader(Context context) {
         this.context = context;
     }
 
+    @Override
     public List<AppPreview> load(){
         PackageManager manager = context.getPackageManager();
         List<AppPreview> apps = new ArrayList<AppPreview>();

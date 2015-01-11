@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "es.juandavidvega.simplelauncher"
+        applicationId "es.juandavidvega.conect2launcher"
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1

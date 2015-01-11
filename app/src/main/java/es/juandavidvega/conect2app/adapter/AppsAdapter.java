@@ -1,4 +1,4 @@
-package es.juandavidvega.simplelauncher.adapter;
+package es.juandavidvega.conect2app.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,9 +9,8 @@ import android.widget.BaseAdapter;
 
 import java.util.List;
 
-import es.juandavidvega.simplelauncher.AppPreviewHolder;
-import es.juandavidvega.simplelauncher.R;
-import es.juandavidvega.simplelauncher.holder.AppPreview;
+import es.juandavidvega.conect2app.holder.AppPreviewHolder;
+import es.juandavidvega.conect2app.holder.AppPreview;
 
 public class AppsAdapter extends BaseAdapter{
 

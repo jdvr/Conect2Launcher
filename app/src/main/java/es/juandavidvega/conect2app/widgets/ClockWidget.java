@@ -1,4 +1,4 @@
-package es.juandavidvega.simplelauncher.widgets;
+package es.juandavidvega.conect2app.widgets;
 
 import android.widget.TextView;
 
@@ -9,20 +9,20 @@ import java.util.Date;
 public class ClockWidget {
 
     private final TextView hour;
-    private final TextView minutesAndSecond;
+    private final TextView minutes;
     private Date lastDate;
 
-    public ClockWidget(TextView hour, TextView minutesAndSecond){
+    public ClockWidget(TextView hour, TextView minutes){
         this.hour = hour;
-        this.minutesAndSecond = minutesAndSecond;
+        this.minutes = minutes;
     }
 
     public TextView getHour() {
         return hour;
     }
 
-    public TextView getMinutesAndSecond() {
-        return minutesAndSecond;
+    public TextView getMinutes() {
+        return minutes;
     }
 
     public void update(Date date) {
@@ -32,7 +32,7 @@ public class ClockWidget {
     }
 
     private void updateSecondsAndMinutes() {
-        updateField(minutesAndSecond, new SimpleDateFormat(":mm:ss"));
+        updateField(minutes, new SimpleDateFormat(":mm"));
     }
 
     private void updateHour() {
