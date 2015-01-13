@@ -1,4 +1,4 @@
-package es.juandavidvega.conect2app.interoperability;
+package es.juandavidvega.conect2app.launcher.interoperability;
 
 /**
  * Created by JuanDavid on 11/01/2015.

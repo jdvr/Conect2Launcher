@@ -1,12 +1,13 @@
-package es.juandavidvega.conect2app.widgets;
+package es.juandavidvega.conect2app.launcher.widgets;
 
+import android.view.View;
 import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ClockWidget {
+public class ClockWidget implements Widget{
 
     private final TextView hour;
     private final TextView minutes;
@@ -25,10 +26,20 @@ public class ClockWidget {
         return minutes;
     }
 
-    public void update(Date date) {
-        this.lastDate = date;
+    public void setLastDate(Date lastDate) {
+        this.lastDate = lastDate;
+    }
+
+    @Override
+    public void update() {
         updateHour();
         updateSecondsAndMinutes();
+    }
+
+    @Override
+    public void makeVisible() {
+        hour.setVisibility(View.VISIBLE);
+        minutes.setVisibility(View.VISIBLE);
     }
 
     private void updateSecondsAndMinutes() {

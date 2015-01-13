@@ -1,4 +1,4 @@
-package es.juandavidvega.conect2app.holder;
+package es.juandavidvega.conect2app.remote.model;
 
 import android.graphics.drawable.Drawable;
 

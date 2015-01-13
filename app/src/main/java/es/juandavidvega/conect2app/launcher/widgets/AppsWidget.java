@@ -1,14 +1,15 @@
-package es.juandavidvega.conect2app.widgets;
+package es.juandavidvega.conect2app.launcher.widgets;
 
+import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 
-public class AppsWidget {
+public class AppsWidget implements Widget {
 
-    private final GridView appsGridView;
-    private final BaseAdapter appsAdpater;
+    private GridView appsGridView;
+    private BaseAdapter appsAdpater;
 
     public AppsWidget(GridView appsGridView, BaseAdapter appsAdapter) {
         this.appsGridView = appsGridView;
@@ -30,5 +31,15 @@ public class AppsWidget {
 
     public void setItemClickListener(AdapterView.OnItemClickListener listener){
         appsGridView.setOnItemClickListener(listener);
+    }
+
+    @Override
+    public void update() {
+        appsAdpater.notifyDataSetChanged();
+    }
+
+    @Override
+    public void makeVisible() {
+        appsGridView.setVisibility(View.VISIBLE);
     }
 }

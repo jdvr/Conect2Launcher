@@ -1,11 +1,11 @@
-package es.juandavidvega.conect2app.holder;
+package es.juandavidvega.conect2app.launcher.holder;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import es.juandavidvega.conect2app.R;
+import es.juandavidvega.conect2app.launcher.R;
+import es.juandavidvega.conect2app.remote.model.AppPreview;
 
 public class AppPreviewHolder {
     private TextView label;

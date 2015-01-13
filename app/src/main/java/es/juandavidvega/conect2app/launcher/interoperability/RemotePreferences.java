@@ -1,9 +1,9 @@
-package es.juandavidvega.conect2app.interoperability;
+package es.juandavidvega.conect2app.launcher.interoperability;
 
 import java.util.Date;
 import java.util.List;
 
-import es.juandavidvega.conect2app.holder.AppPreview;
+import es.juandavidvega.conect2app.remote.model.AppPreview;
 
 public class RemotePreferences {
     //param list should be include here

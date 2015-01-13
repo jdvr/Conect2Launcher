@@ -1,4 +1,4 @@
-package es.juandavidvega.conect2app.persistence;
+package es.juandavidvega.conect2app.remote.persistence;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.content.pm.ResolveInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.juandavidvega.conect2app.holder.AppPreview;
+import es.juandavidvega.conect2app.remote.model.AppPreview;
 
 public class AllAppsLoader implements AppLoader {
     private  final Context context;
@@ -19,7 +19,7 @@ public class AllAppsLoader implements AppLoader {
     @Override
     public List<AppPreview> load(){
         PackageManager manager = context.getPackageManager();
-        List<AppPreview> apps = new ArrayList<AppPreview>();
+        List<AppPreview> apps = new ArrayList<>();
         Intent i = new Intent(Intent.ACTION_MAIN, null);
         i.addCategory(Intent.CATEGORY_LAUNCHER);
         List<ResolveInfo> availableActivities = manager.queryIntentActivities(i, 0);
@@ -29,6 +29,7 @@ public class AllAppsLoader implements AppLoader {
                     resolveInfo.loadLabel(manager).toString(),
                     resolveInfo.loadIcon(manager)
                     ));
+            if (apps.size() == 4) break;
         }
         return apps;
     }
