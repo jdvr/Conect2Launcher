@@ -18,6 +18,7 @@ public class AllAppsLoader implements AppLoader {
 
     @Override
     public List<AppPreview> load(){
+        /*
         PackageManager manager = context.getPackageManager();
         List<AppPreview> apps = new ArrayList<>();
         Intent i = new Intent(Intent.ACTION_MAIN, null);
@@ -30,7 +31,7 @@ public class AllAppsLoader implements AppLoader {
                     resolveInfo.loadIcon(manager)
                     ));
             if (apps.size() == 4) break;
-        }
-        return apps;
+        }*/
+        return null;
     }
 }

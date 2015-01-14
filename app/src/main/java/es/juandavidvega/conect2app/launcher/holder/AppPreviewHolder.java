@@ -4,6 +4,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import es.juandavidvega.conect2app.launcher.R;
 import es.juandavidvega.conect2app.remote.model.AppPreview;
 
@@ -20,7 +22,7 @@ public class AppPreviewHolder {
 
     public void fillView(AppPreview appPreview) {
         label.setText(appPreview.getLabel());
-        icon.setImageDrawable(appPreview.getIcon());
+        ImageLoader.getInstance().displayImage(appPreview.getIcon(), icon);
     }
 
     public View getView() {

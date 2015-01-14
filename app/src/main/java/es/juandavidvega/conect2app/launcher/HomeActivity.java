@@ -5,6 +5,13 @@ import android.os.Handler;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.utils.StorageUtils;
+
+import java.io.File;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,20 +34,21 @@ public class HomeActivity extends Configurable {
         super.onCreate(savedInstanceState);
         Configurator configurator = new HomeConfigurator(this);
         configurator.configureView(R.layout.home_layout);
-
-
-        /*
-        final List<AppPreview> apps = new AllAppsLoader(getApplicationContext()).load();
-    appsWidget.setItemClickListener(new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-            Intent i = getPackageManager().getLaunchIntentForPackage(apps.get(pos).getName());
-            Log.d("APP", apps.get(pos).getName());
-            HomeActivity.this.startActivity(i);
-        }
-    });
-    */
+        File cacheDir = StorageUtils.getCacheDirectory(getApplicationContext());
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
+                .memoryCacheExtraOptions(480, 800) // default = device screen dimensions
+                .diskCacheExtraOptions(480, 800, null)
+                .denyCacheImageMultipleSizesInMemory()
+                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+                .memoryCacheSize(2 * 1024 * 1024)
+                .diskCacheSize(50 * 1024 * 1024)
+                .diskCacheFileCount(100)
+                .writeDebugLogs()
+                .build();
+        ImageLoader.getInstance().init(config);
     }
+
+
 
 
     @Override

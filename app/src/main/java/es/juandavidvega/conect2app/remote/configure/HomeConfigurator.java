@@ -20,6 +20,7 @@ import es.juandavidvega.conect2app.launcher.widgets.AppsWidget;
 import es.juandavidvega.conect2app.launcher.widgets.ClockWidget;
 import es.juandavidvega.conect2app.launcher.widgets.WidgetContainer;
 import es.juandavidvega.conect2app.remote.persistence.AllAppsLoader;
+import es.juandavidvega.conect2app.remote.persistence.CustoAppsLoader;
 
 /**
  * Created by JuanDavid on 14/01/2015.
@@ -55,7 +56,7 @@ public class HomeConfigurator implements Configurator {
     private void addAppsWidget() {
         final AppsWidget apps = new AppsWidget((GridView) target.findViewById(R.id.gv_apps),
                                           new AppsAdapter(target.getApplicationContext(), R.layout.app_preview));
-        apps.getAppsAdpater().setApps(new AllAppsLoader(target.getApplicationContext()).load());
+        apps.getAppsAdpater().setApps(new CustoAppsLoader().load());
         apps.loadAppsGrid();
         apps.setItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

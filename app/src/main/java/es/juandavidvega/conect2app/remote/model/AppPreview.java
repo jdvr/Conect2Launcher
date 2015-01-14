@@ -6,12 +6,12 @@ public class AppPreview {
 
     private final String name;
     private final String label;
-    private final Drawable icon;
+    private final String iconURL;
 
-    public AppPreview(String name, String label, Drawable icon) {
+    public AppPreview(String name, String label, String iconURL) {
         this.name = name;
         this.label = label;
-        this.icon = icon;
+        this.iconURL = iconURL;
     }
 
     public String getName() {
@@ -22,7 +22,7 @@ public class AppPreview {
         return label;
     }
 
-    public Drawable getIcon() {
-        return icon;
+    public String getIcon() {
+        return iconURL;
     }
 }
