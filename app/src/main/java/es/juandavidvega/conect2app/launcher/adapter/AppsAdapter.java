@@ -33,7 +33,7 @@ public class AppsAdapter extends BaseAdapter{
     }
 
     @Override
-    public Object getItem(int position) {
+    public AppPreview getItem(int position) {
         return apps.get(position);
     }
 

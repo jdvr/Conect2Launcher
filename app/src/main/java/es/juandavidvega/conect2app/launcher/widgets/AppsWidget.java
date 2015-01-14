@@ -6,6 +6,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 
+import es.juandavidvega.conect2app.launcher.adapter.AppsAdapter;
+
 public class AppsWidget implements Widget {
 
     private GridView appsGridView;
@@ -14,10 +16,9 @@ public class AppsWidget implements Widget {
     public AppsWidget(GridView appsGridView, BaseAdapter appsAdapter) {
         this.appsGridView = appsGridView;
         this.appsAdpater = appsAdapter;
-        loadAppsGrid();
     }
 
-    private void loadAppsGrid() {
+    public void loadAppsGrid() {
         appsGridView.setAdapter(appsAdpater);
     }
 
@@ -25,8 +26,8 @@ public class AppsWidget implements Widget {
         return appsGridView;
     }
 
-    public Adapter getAppsAdpater() {
-        return appsAdpater;
+    public AppsAdapter getAppsAdpater() {
+        return (AppsAdapter) appsAdpater;
     }
 
     public void setItemClickListener(AdapterView.OnItemClickListener listener){
