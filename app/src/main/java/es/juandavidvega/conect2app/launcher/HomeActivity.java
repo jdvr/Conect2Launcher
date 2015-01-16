@@ -34,18 +34,7 @@ public class HomeActivity extends Configurable {
         super.onCreate(savedInstanceState);
         Configurator configurator = new HomeConfigurator(this);
         configurator.configureView(R.layout.home_layout);
-        File cacheDir = StorageUtils.getCacheDirectory(getApplicationContext());
-        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
-                .memoryCacheExtraOptions(480, 800) // default = device screen dimensions
-                .diskCacheExtraOptions(480, 800, null)
-                .denyCacheImageMultipleSizesInMemory()
-                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
-                .memoryCacheSize(2 * 1024 * 1024)
-                .diskCacheSize(50 * 1024 * 1024)
-                .diskCacheFileCount(100)
-                .writeDebugLogs()
-                .build();
-        ImageLoader.getInstance().init(config);
+
     }
 
 

@@ -2,6 +2,8 @@ package es.juandavidvega.conect2app.remote.configure;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -9,7 +11,14 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.utils.StorageUtils;
+
+import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,9 +31,7 @@ import es.juandavidvega.conect2app.launcher.widgets.WidgetContainer;
 import es.juandavidvega.conect2app.remote.persistence.AllAppsLoader;
 import es.juandavidvega.conect2app.remote.persistence.CustoAppsLoader;
 
-/**
- * Created by JuanDavid on 14/01/2015.
- */
+
 public class HomeConfigurator implements Configurator {
 
     private Configurable configurable;
@@ -46,6 +53,22 @@ public class HomeConfigurator implements Configurator {
     public void configureView(int resource) {
         target.setContentView(resource);
         addWidgets();
+        configureImageLoader();
+    }
+
+    private void configureImageLoader() {
+        File cacheDir = StorageUtils.getCacheDirectory(target.getApplicationContext());
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(target.getApplicationContext())
+                .memoryCacheExtraOptions(480, 800) // default = device screen dimensions
+                .diskCacheExtraOptions(480, 800, null)
+                .denyCacheImageMultipleSizesInMemory()
+                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+                .memoryCacheSize(2 * 1024 * 1024)
+                .diskCacheSize(50 * 1024 * 1024)
+                .diskCacheFileCount(100)
+                .writeDebugLogs()
+                .build();
+        ImageLoader.getInstance().init(config);
     }
 
     private void addWidgets() {

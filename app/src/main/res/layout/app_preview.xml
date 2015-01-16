@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/iv_app_icon"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:contentDescription="@string/app_name"
         android:layout_weight="80"
         android:layout_marginLeft="25dp"
@@ -21,6 +21,7 @@
         android:id="@+id/tv_app_label"
         android:layout_width="fill_parent"
         android:layout_weight="20"
+        android:textColor="@color/white"
         android:layout_marginLeft="25dp"
         android:layout_height="wrap_content"
         />
