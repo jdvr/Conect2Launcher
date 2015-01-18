@@ -1,4 +1,4 @@
-package es.juandavidvega.conect2app.launcher.interoperability;
+package es.juandavidvega.conect2app.remote.model;
 
 import java.util.Date;
 import java.util.List;
@@ -7,12 +7,15 @@ import es.juandavidvega.conect2app.remote.model.AppPreview;
 
 public class RemotePreferences {
     //param list should be include here
-    private final List<AppPreview> apps;
+    private List<AppPreview> apps;
     private final Date date;
 
-    public RemotePreferences(List<AppPreview> apps, Date date) {
+    public RemotePreferences() {
+        this.date = new Date();
+    }
+
+    public void setApps(List<AppPreview> apps) {
         this.apps = apps;
-        this.date = date;
     }
 
     public List<AppPreview> getApps() {
