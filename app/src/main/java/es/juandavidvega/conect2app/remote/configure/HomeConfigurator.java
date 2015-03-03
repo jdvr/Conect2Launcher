@@ -1,6 +1,5 @@
 package es.juandavidvega.conect2app.remote.configure;
 
-import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -24,7 +23,6 @@ import es.juandavidvega.conect2app.launcher.appsmanager.AppStarter;
 import es.juandavidvega.conect2app.launcher.widgets.AppsWidget;
 import es.juandavidvega.conect2app.launcher.widgets.ClockWidget;
 import es.juandavidvega.conect2app.launcher.widgets.WidgetContainer;
-import es.juandavidvega.conect2app.remote.interoperability.Mock.RemotePreferencesLoader;
 import es.juandavidvega.conect2app.remote.persistence.CustomAppsLoader;
 
 
@@ -39,15 +37,12 @@ public class HomeConfigurator implements Configurator {
         widgetForConfigurable = new WidgetContainer();
     }
 
-    public Configurable getConfigurableActivity() {
-        return configurable;
-    }
-
     @Override
     public void configureView(int resource) {
         configurable.setContentView(resource);
         addWidgets();
         configureImageLoader();
+        configurable.hasBeenConfigured(widgetForConfigurable);
     }
 
     private void configureImageLoader() {
@@ -60,7 +55,6 @@ public class HomeConfigurator implements Configurator {
                 .memoryCacheSize(2 * 1024 * 1024)
                 .diskCacheSize(50 * 1024 * 1024)
                 .diskCacheFileCount(100)
-                .writeDebugLogs()
                 .build();
         ImageLoader.getInstance().init(config);
     }
@@ -81,8 +75,8 @@ public class HomeConfigurator implements Configurator {
 
                 try {
                     AppStarter appStarter = (AppStarter) Class.forName("es.juandavidvega.conect2app.launcher.appsmanager." + apps.getAppsAdpater().getItem(position).getType() + "AppStarter").newInstance();
-                    Log.d("APP", apps.getAppsAdpater().getItem(position).getName());
-                    appStarter.start(configurable, apps.getAppsAdpater().getItem(position).getName());
+                    Log.d("APP", apps.getAppsAdpater().getItem(position).getId());
+                    appStarter.start(configurable, apps.getAppsAdpater().getItem(position).getId());
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 } catch (InstantiationException e) {
