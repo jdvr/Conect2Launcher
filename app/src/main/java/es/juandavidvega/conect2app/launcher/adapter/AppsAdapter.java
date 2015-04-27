@@ -29,7 +29,7 @@ public class AppsAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return 3;
+        return apps.size() > 3 ? 3 : apps.size();
     }
 
     @Override

@@ -61,22 +61,28 @@ public class LoginActivity extends Activity {
             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
             return;
         }
-        registerAtConnect2(address);
+
+
     }
 
-    private void registerAtConnect2(String address) throws JSONException {
+    private void registerAtConnect2(String address) {
         CreateRelationDataMapper createRelationDataMapper = new CreateRelationDataMapper();
         createRelationDataMapper.setAddress(address);
         createRelationDataMapper.setDevice(phone.getText().toString());
         createRelationDataMapper.setUser(user.getText().toString());
         createRelationDataMapper.setPassword(password.getText().toString());
-        new RequestSender(getApplicationContext(), new ResponseHandler() {
-            @Override
-            public boolean recivedResponse(String response) {
-                Log.e("LOGN", "LOGIN response: " + response);
-                return false;
-            }
-        }).registerDevice(createRelationDataMapper);
+        try {
+            new RequestSender(getApplicationContext(), new ResponseHandler() {
+                @Override
+                public boolean recivedResponse(String response) {
+                    Log.e("LOGN", "LOGIN response: " + response);
+                    done();
+                    return false;
+                }
+            }).registerDevice(createRelationDataMapper);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -158,7 +164,7 @@ public class LoginActivity extends Activity {
                         "Registered with GCM Server." + o, Toast.LENGTH_LONG)
                         .show();
 
-                        registerAtServer();
+                registerAtServer();
             }
         }.execute(null, null, null);
     }
@@ -173,25 +179,26 @@ public class LoginActivity extends Activity {
         editor.commit();
     }
 
-    private void registerAtServer(){
+    private void registerAtServer() {
 
         final String regId = getSharedPreferences("credentials", Context.MODE_PRIVATE).getString(Config.REG_ID, null);
         if (regId == null)
             Log.d(TAG, "regId: " + null);
-        Log.d(TAG, "regId: " + null);
+        Log.d(TAG, "regId: " + regId);
 
         final Context context = this;
         AsyncTask shareRegidTask = new AsyncTask() {
             @Override
             protected String doInBackground(Object... params) {
-                return new ShareExternalServer().shareRegIdWithAppServer(context, regId);
+                registerAtConnect2(regId);
+                return "";
             }
 
             @Override
             protected void onPostExecute(Object result) {
                 Toast.makeText(getApplicationContext(), result + "",
                         Toast.LENGTH_LONG).show();
-                done();
+
             }
 
         };

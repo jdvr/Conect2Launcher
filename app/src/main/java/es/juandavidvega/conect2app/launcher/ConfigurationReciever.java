@@ -14,6 +14,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.juandavidvega.conect2app.models.connect.model.Item;
+import es.juandavidvega.conect2app.models.connect.view.SerializableConfiguration;
 import es.juandavidvega.conect2app.remote.configure.Configurable;
 import es.juandavidvega.conect2app.remote.interoperability.HttpJson;
 import es.juandavidvega.conect2app.remote.model.AppPreview;
@@ -35,17 +37,26 @@ public class ConfigurationReciever extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e("here", "there");
-        String AppsJson = intent.getExtras().get(MESSAGE_KEY).toString();
-        Type appsListType = new TypeToken<ArrayList<AppPreview>>(){}.getType();
-        pushData((List<AppPreview>) new Gson().fromJson(AppsJson, appsListType));
+        Log.e("ConfigurationService", "Start");
+        if(intent.getExtras().get(MESSAGE_KEY) == null) return 1;
+        String appsJson = intent.getExtras().get(MESSAGE_KEY).toString();
+        Log.e("ConfigurationService", appsJson);
+        SerializableConfiguration serializableConfiguration = new Gson().fromJson(appsJson, SerializableConfiguration.class);
+        pushData(bindItemToAppPreview(serializableConfiguration.getItems()));
         return 1;
+    }
+
+    private List<AppPreview> bindItemToAppPreview(Item[] items) {
+        List<AppPreview> apps = new ArrayList<>();
+        for (Item item : items) {
+            apps.add(new AppPreview(item.getId(), item.getIconURL(), item.getType().toString()));
+        }
+        return apps;
     }
 
 
     @Override
     public IBinder onBind(Intent arg0) {
-        Bundle extras = arg0.getExtras();
         Log.d("service", "onBind");
         // Get messager from the Activity
         return mBinder;
