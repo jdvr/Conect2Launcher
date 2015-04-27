@@ -16,8 +16,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 
+import es.juandavidvega.conect2app.remote.interoperability.CreateRelationDataMapper;
+import es.juandavidvega.conect2app.remote.interoperability.RequestSender;
+import es.juandavidvega.conect2app.remote.interoperability.ResponseHandler;
 import es.juandavidvega.conect2app.remote.interoperability.ShareExternalServer;
 
 import static es.juandavidvega.conect2app.launcher.Config.*;
@@ -27,6 +32,8 @@ public class LoginActivity extends Activity {
     private static final String TAG = "LOGIN_ACTIVITY";
 
     private EditText phone;
+    private EditText user;
+    private EditText password;
     private GoogleCloudMessaging googleCloudMessaging;
     private String registerId;
 
@@ -40,23 +47,36 @@ public class LoginActivity extends Activity {
     private void configurePhoneView() {
         phone = (EditText) findViewById(R.id.et_phone_number);
         phone.setText(((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number());
+        user = (EditText) findViewById(R.id.et_user_email);
+        password = (EditText) findViewById(R.id.et_password);
     }
 
     public void useTermsViewDetails(View view) {
 
     }
 
-    public void loginButtonClick(View view) {
+    public void loginButtonClick(View view) throws JSONException {
         String address = registerAtGCM();
         if (address == null) {
             Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
             return;
         }
-        registerAtConnect2();
+        registerAtConnect2(address);
     }
 
-    private void registerAtConnect2() {
-
+    private void registerAtConnect2(String address) throws JSONException {
+        CreateRelationDataMapper createRelationDataMapper = new CreateRelationDataMapper();
+        createRelationDataMapper.setAddress(address);
+        createRelationDataMapper.setDevice(phone.getText().toString());
+        createRelationDataMapper.setUser(user.getText().toString());
+        createRelationDataMapper.setPassword(password.getText().toString());
+        new RequestSender(getApplicationContext(), new ResponseHandler() {
+            @Override
+            public boolean recivedResponse(String response) {
+                Log.e("LOGN", "LOGIN response: " + response);
+                return false;
+            }
+        }).registerDevice(createRelationDataMapper);
 
     }
 
