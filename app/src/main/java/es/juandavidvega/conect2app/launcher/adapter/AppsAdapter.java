@@ -1,4 +1,4 @@
-package es.juandavidvega.conect2app.adapter;
+package es.juandavidvega.conect2app.launcher.adapter;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,28 +9,31 @@ import android.widget.BaseAdapter;
 
 import java.util.List;
 
-import es.juandavidvega.conect2app.holder.AppPreviewHolder;
-import es.juandavidvega.conect2app.holder.AppPreview;
+import es.juandavidvega.conect2app.launcher.holder.AppPreviewHolder;
+import es.juandavidvega.conect2app.remote.model.AppPreview;
 
 public class AppsAdapter extends BaseAdapter{
 
     private final Context context;
     private final int itemLayout;
-    private final List<AppPreview> apps;
+    private List<AppPreview> apps;
 
-    public AppsAdapter(Context context, int layout, List<AppPreview> apps) {
+    public AppsAdapter(Context context, int layout) {
         this.context = context;
         this.itemLayout = layout;
+    }
+
+    public void setApps(List<AppPreview> apps) {
         this.apps = apps;
     }
 
     @Override
     public int getCount() {
-        return apps.size();
+        return 3;
     }
 
     @Override
-    public Object getItem(int position) {
+    public AppPreview getItem(int position) {
         return apps.get(position);
     }
 

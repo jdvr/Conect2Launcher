@@ -1,4 +1,9 @@
 <resources>
-    <string name="app_name">Conect2Launcher</string>
+    <string name="app_name">Connect2Launcher</string>
     <string name="show_apps">Show Apps</string>
+    <string name="ask_phone_number">Introduce tu número de teléfono</string>
+    <string name="password">Introduce tu contraseña</string>
+    <string name="user_terms_ask">Acepto los terminos de uso</string>
+    <string name="use_terms_link">Terminos de uso</string>
+    <string name="login_btn">Registrarse</string>
 </resources>

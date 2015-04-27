@@ -2,27 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="100dp"
+    android:layout_height="wrap_content"
     android:padding="10dp"
     android:layout_margin="5dp"
-    android:background="@drawable/app_preview_bg"
     >
 
     <ImageView
         android:id="@+id/iv_app_icon"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:contentDescription="@string/app_name"
-        android:layout_weight="80"
         android:layout_marginLeft="25dp"
-        />
-
-    <TextView
-        android:id="@+id/tv_app_label"
-        android:layout_width="fill_parent"
-        android:layout_weight="20"
-        android:layout_marginLeft="25dp"
-        android:layout_height="wrap_content"
         />
 
 </LinearLayout>
