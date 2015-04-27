@@ -47,7 +47,17 @@ public class LoginActivity extends Activity {
     }
 
     public void loginButtonClick(View view) {
-        registerAtGCM();
+        String address = registerAtGCM();
+        if (address == null) {
+            Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+            return;
+        }
+        registerAtConnect2();
+    }
+
+    private void registerAtConnect2() {
+
+
     }
 
     private String registerAtGCM() {

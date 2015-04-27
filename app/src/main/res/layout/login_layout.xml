@@ -8,7 +8,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="50"
+        android:layout_weight="35"
         android:contentDescription="@string/app_name"
         android:src="@drawable/connect2letras"
         android:layout_gravity="center_horizontal"
@@ -25,7 +25,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:ems="10"
-        android:layout_gravity="center_horizontal"
+        android:layout_weight="15"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp" />
+
+    <EditText
+        android:id="@+id/et_user_email"
+        android:inputType="textEmailAddress"
+        android:hint="@string/ask_phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:ems="10"
         android:layout_weight="15"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
