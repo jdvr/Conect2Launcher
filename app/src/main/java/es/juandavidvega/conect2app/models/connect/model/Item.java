@@ -26,7 +26,7 @@ public class Item implements Serializable{
         return type;
     }
 
-    public enum Type {Action("Action"), Contact("Contact"), Application("Application");
+    public enum Type {Action("Action"), Contact("Contact"), Application("App");
         private final String application;
 
         Type(String application) {

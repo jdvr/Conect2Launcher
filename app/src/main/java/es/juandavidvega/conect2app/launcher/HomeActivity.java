@@ -10,58 +10,53 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import es.juandavidvega.conect2app.launcher.widgets.AppsWidget;
 import es.juandavidvega.conect2app.launcher.widgets.WidgetContainer;
+import es.juandavidvega.conect2app.models.connect.view.SerializableConfiguration;
 import es.juandavidvega.conect2app.remote.configure.Configurable;
 import es.juandavidvega.conect2app.remote.configure.Configurator;
 import es.juandavidvega.conect2app.remote.configure.HomeConfigurator;
-import es.juandavidvega.conect2app.remote.model.AppPreview;
 
 public class HomeActivity extends Configurable {
 
     private WidgetContainer myWidgets;
-    private ConfigurationReciever stateListener;
+    private ConfigurationReciever configurationReciever;
     private Handler handler;
-    private ServiceConnection myServiceConnection;
-
+    private ServiceConnection reciverConnection;
+    Configurator configurator = new HomeConfigurator(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkLogin();
-        Configurator configurator = new HomeConfigurator(this);
         configurator.configureView(R.layout.home_layout);
-        myServiceConnection = new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                stateListener = ((ConfigurationReciever.MyBinder) service).getService();
-                stateListener.setHome(HomeActivity.this);
-            }
 
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                stateListener = null;
-            }
-        };
-
-        handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                HomeActivity.this.updateData(new ArrayList<AppPreview>());
-            }
-        };
     }
 
     @Override
     protected void onResume() {
 
         Log.d("activity", "onResume");
-        if (stateListener == null) {
+        if (configurationReciever == null) {
+            reciverConnection = new ServiceConnection() {
+                @Override
+                public void onServiceConnected(ComponentName name, IBinder service) {
+                    configurationReciever = ((ConfigurationReciever.MyBinder) service).getService();
+                    configurationReciever.setHome(HomeActivity.this);
+                }
+
+                @Override
+                public void onServiceDisconnected(ComponentName name) {
+                    configurationReciever = null;
+                }
+            };
+
+            handler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    //HomeActivity.this.updateData(null);
+                }
+            };
             bindConfigurationProcessor();
         }
         super.onResume();
@@ -71,9 +66,10 @@ public class HomeActivity extends Configurable {
     protected void onPause() {
 
         Log.d("activity", "onPause");
-        if (stateListener != null) {
-            unbindService(myServiceConnection);
-            myServiceConnection= null;
+        if (configurationReciever != null) {
+            unbindService(reciverConnection);
+            reciverConnection = null;
+            configurationReciever = null;
         }
         super.onPause();
     }
@@ -82,11 +78,11 @@ public class HomeActivity extends Configurable {
         Intent intent = new Intent(this, ConfigurationReciever.class);
         Messenger messenger = new Messenger(handler);
         intent.putExtra("MESSENGER", messenger);
-        bindService(intent, myServiceConnection, Context.BIND_AUTO_CREATE);
+        bindService(intent, reciverConnection, Context.BIND_AUTO_CREATE);
     }
 
     private void checkLogin() {
-        if(getUser() != null) return;
+        if (getUser() != null) return;
         askCredentials();
     }
 
@@ -100,10 +96,9 @@ public class HomeActivity extends Configurable {
     }
 
     @Override
-    public void updateData(List<AppPreview> newData) {
-        AppsWidget appsWidget = (AppsWidget) myWidgets.getWidgets().get(1);
-        appsWidget.getAppsAdpater().setApps(newData);
-        appsWidget.update();
+    public void updateData(SerializableConfiguration newData) {
+        if (newData == null) return;
+        configurator.update(newData);
     }
 
     public String getUser() {

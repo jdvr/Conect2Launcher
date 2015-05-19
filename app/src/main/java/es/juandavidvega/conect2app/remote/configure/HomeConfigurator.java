@@ -13,7 +13,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -22,7 +24,11 @@ import es.juandavidvega.conect2app.launcher.adapter.AppsAdapter;
 import es.juandavidvega.conect2app.launcher.appsmanager.AppStarter;
 import es.juandavidvega.conect2app.launcher.widgets.AppsWidget;
 import es.juandavidvega.conect2app.launcher.widgets.ClockWidget;
+import es.juandavidvega.conect2app.launcher.widgets.Widget;
 import es.juandavidvega.conect2app.launcher.widgets.WidgetContainer;
+import es.juandavidvega.conect2app.models.connect.model.Item;
+import es.juandavidvega.conect2app.models.connect.view.SerializableConfiguration;
+import es.juandavidvega.conect2app.remote.model.AppPreview;
 import es.juandavidvega.conect2app.remote.persistence.CustomAppsLoader;
 
 
@@ -43,6 +49,19 @@ public class HomeConfigurator implements Configurator {
         addWidgets();
         configureImageLoader();
         configurable.hasBeenConfigured(widgetForConfigurable);
+    }
+
+    @Override
+    public void update(SerializableConfiguration newData) {
+        updateApps(newData.getItems());
+    }
+
+    private void updateApps(Item[] items) {
+        AppsWidget widget = getAppsWidget();
+        widget.getAppsAdpater().setApps(bindItemToAppPreview(items));
+        widget.setItemClickListener(new AppClickListener(widget.getAppsAdpater()));
+        widget.getAppsAdpater().notifyDataSetChanged();
+
     }
 
     private void configureImageLoader() {
@@ -66,34 +85,16 @@ public class HomeConfigurator implements Configurator {
 
     private void addAppsWidget() {
         final AppsWidget apps = new AppsWidget((GridView) configurable.findViewById(R.id.gv_apps),
-                                          new AppsAdapter(configurable.getApplicationContext(), R.layout.app_preview));
+                new AppsAdapter(configurable.getApplicationContext(), R.layout.app_preview));
         apps.getAppsAdpater().setApps(new CustomAppsLoader().load());
         apps.loadAppsGrid();
-        apps.setItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                try {
-                    AppStarter appStarter = (AppStarter) Class.forName("es.juandavidvega.conect2app.launcher.appsmanager." + apps.getAppsAdpater().getItem(position).getType() + "AppStarter").newInstance();
-                    Log.d("APP", apps.getAppsAdpater().getItem(position).getId());
-                    appStarter.start(configurable, apps.getAppsAdpater().getItem(position).getId());
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-        });
+        apps.setItemClickListener(new AppClickListener(apps.getAppsAdpater()));
         widgetForConfigurable.add(apps);
     }
 
     private void addClockWidget() {
         ClockWidget clock = new ClockWidget((TextView) configurable.findViewById(R.id.tv_hour),
-                                            (TextView) configurable.findViewById(R.id.tv_minutes_seg));
+                (TextView) configurable.findViewById(R.id.tv_minutes_seg));
         new Timer().schedule(getClockTask(new Handler(), clock), 0, 1000);
         widgetForConfigurable.add(clock);
 
@@ -109,10 +110,54 @@ public class HomeConfigurator implements Configurator {
                         try {
                             clock.setLastDate(new Date());
                             clock.update();
-                        }catch (Exception e){}
+                        } catch (Exception e) {
+                        }
                     }
                 });
             }
         };
+    }
+
+    private AppsWidget getAppsWidget() {
+        for (Widget widget : widgetForConfigurable.getWidgets())
+            if (widget instanceof AppsWidget) return (AppsWidget) widget;
+        return null;
+    }
+
+    private List<AppPreview> bindItemToAppPreview(Item[] items) {
+        List<AppPreview> apps = new ArrayList<>();
+        for (Item item : items) {
+            apps.add(new AppPreview(item.getId(), item.getIconURL(), item.getType().toString()));
+        }
+        return apps;
+    }
+
+
+    private class AppClickListener implements AdapterView.OnItemClickListener {
+
+
+        private AppsAdapter apps;
+
+        private AppClickListener(AppsAdapter apps) {
+            this.apps = apps;
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            try {
+                AppStarter appStarter = (AppStarter) Class.forName("es.juandavidvega.conect2app.launcher.appsmanager." + apps.getItem(position).getType() + "AppStarter").newInstance();
+                Log.d("APP", apps.getItem(position).getId());
+                appStarter.start(configurable, apps.getItem(position).getId());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+
+
+        }
     }
 }

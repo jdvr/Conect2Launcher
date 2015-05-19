@@ -20,6 +20,8 @@ public class RequestSender {
 
     private Context context;
     private ResponseHandler responseHandler;
+    //private String BaseURL = "http://juandavidvega.es:8080/connectdev/";
+    private String BaseURL = "http://192.168.56.1:8080/";
 
     public RequestSender(Context context, ResponseHandler responseHandler) {
         this.context = context;
@@ -28,7 +30,7 @@ public class RequestSender {
 
     public void registerDevice(CreateRelationDataMapper createRelationDataMapper) throws JSONException {
         RequestQueue queue = Volley.newRequestQueue(context);
-        String url = "http://192.168.56.1:8080/api/noauth/user/add/device";
+        String url = this.BaseURL + "api/noauth/user/add/device";
         final String data = new Gson().toJson(createRelationDataMapper);
 
         Log.e("SEND", "url que voy a enviar: " + url);

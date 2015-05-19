@@ -42,17 +42,10 @@ public class ConfigurationReciever extends Service {
         String appsJson = intent.getExtras().get(MESSAGE_KEY).toString();
         Log.e("ConfigurationService", appsJson);
         SerializableConfiguration serializableConfiguration = new Gson().fromJson(appsJson, SerializableConfiguration.class);
-        pushData(bindItemToAppPreview(serializableConfiguration.getItems()));
+        pushData(serializableConfiguration);
         return 1;
     }
 
-    private List<AppPreview> bindItemToAppPreview(Item[] items) {
-        List<AppPreview> apps = new ArrayList<>();
-        for (Item item : items) {
-            apps.add(new AppPreview(item.getId(), item.getIconURL(), item.getType().toString()));
-        }
-        return apps;
-    }
 
 
     @Override
@@ -67,7 +60,7 @@ public class ConfigurationReciever extends Service {
         this.home = home;
     }
 
-    public void pushData(List<AppPreview> data) {
+    public void pushData(SerializableConfiguration data) {
         home.updateData(data);
     }
 

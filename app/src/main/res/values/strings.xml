@@ -6,4 +6,5 @@
     <string name="user_terms_ask">Acepto los terminos de uso</string>
     <string name="use_terms_link">Terminos de uso</string>
     <string name="login_btn">Registrarse</string>
+    <string name="ask_email">Email</string>
 </resources>

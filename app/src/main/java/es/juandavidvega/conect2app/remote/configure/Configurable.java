@@ -5,6 +5,7 @@ import android.app.Activity;
 import java.util.List;
 
 import es.juandavidvega.conect2app.launcher.widgets.WidgetContainer;
+import es.juandavidvega.conect2app.models.connect.view.SerializableConfiguration;
 import es.juandavidvega.conect2app.remote.model.AppPreview;
 
 /**
@@ -13,5 +14,5 @@ import es.juandavidvega.conect2app.remote.model.AppPreview;
 public abstract class Configurable extends Activity {
     public abstract void hasBeenConfigured(WidgetContainer viewWidgets);
 
-    public abstract void updateData(List<AppPreview> newData);
+    public abstract void updateData(SerializableConfiguration newData);
 }

@@ -34,7 +34,7 @@
     <EditText
         android:id="@+id/et_user_email"
         android:inputType="textEmailAddress"
-        android:hint="@string/ask_phone_number"
+        android:hint="@string/ask_email"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:ems="10"

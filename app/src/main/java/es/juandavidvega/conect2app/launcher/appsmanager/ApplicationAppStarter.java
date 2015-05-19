@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 
-public class PackageAppStarter extends  AppStarter{
+public class ApplicationAppStarter extends  AppStarter{
 
     @Override
     public void start(Activity activity, String appIdentifier) {
