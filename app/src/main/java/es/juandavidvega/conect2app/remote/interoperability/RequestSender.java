@@ -15,6 +15,8 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 import es.juandavidvega.conect2app.models.connect.view.DeviceInfo;
 
 public class RequestSender {
@@ -79,7 +81,8 @@ public class RequestSender {
 
         Log.e("SEND", "url que voy a enviar: " + url);
         Log.e("SEND", "datos enviar: " + data);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(data), new Response.Listener<JSONObject>() {
+
+        Request jsonObjectRequest = new SendDataRequest(Request.Method.POST, url, data, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 responseHandler.onResponse(jsonObject.toString());
@@ -90,6 +93,7 @@ public class RequestSender {
                 Log.e("Error Volley", volleyError.toString());
             }
         });
+
         queue.add(jsonObjectRequest);
 
     }
