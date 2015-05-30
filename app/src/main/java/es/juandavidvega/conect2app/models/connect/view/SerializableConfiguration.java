@@ -37,11 +37,11 @@ public class SerializableConfiguration {
         return items;
     }
 
-    public boolean isClock() {
+    public boolean clock() {
         return clock;
     }
 
-    public boolean isDate() {
+    public boolean date() {
         return date;
     }
 
