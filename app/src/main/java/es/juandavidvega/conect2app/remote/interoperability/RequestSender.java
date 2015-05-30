@@ -9,12 +9,15 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Map;
+
+import es.juandavidvega.conect2app.models.connect.view.DeviceInfo;
 
 public class RequestSender {
 
@@ -38,7 +41,7 @@ public class RequestSender {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(data), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                responseHandler.recivedResponse(jsonObject.toString());
+                responseHandler.onResponse(jsonObject.toString());
             }
         }, new Response.ErrorListener() {
             @Override
@@ -47,5 +50,51 @@ public class RequestSender {
             }
         });
         queue.add(jsonObjectRequest);
+    }
+
+
+
+    public void readConfiguration(String user, String device) throws JSONException {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String url = this.BaseURL + "api/noauth/device/configuration/"+ device +"/" + user;
+
+        Log.e("SEND", "url que voy a enviar: " + url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                responseHandler.onResponse(jsonObject.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e("Error Volley", volleyError.toString());
+            }
+        });
+        queue.add(jsonObjectRequest);
+
+    }
+
+    public void send(DeviceInfo deviceInfo) throws JSONException {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String url = this.BaseURL + "api/noauth/device/apps";
+        final String data = new Gson().toJson(deviceInfo);
+
+        Log.e("SEND", "url que voy a enviar: " + url);
+        Log.e("SEND", "datos enviar: " + data);
+
+        Request jsonObjectRequest = new SendDataRequest(Request.Method.POST, url, data, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                responseHandler.onResponse(jsonObject.toString());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e("Error Volley", volleyError.toString());
+            }
+        });
+
+        queue.add(jsonObjectRequest);
+
     }
 }

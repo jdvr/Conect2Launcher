@@ -47,6 +47,7 @@ public class LoginActivity extends Activity {
     private void configurePhoneView() {
         phone = (EditText) findViewById(R.id.et_phone_number);
         phone.setText(((TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE)).getLine1Number());
+        if (TextUtils.isEmpty(phone.getText())) phone.setText("605849953");
         user = (EditText) findViewById(R.id.et_user_email);
         password = (EditText) findViewById(R.id.et_password);
     }
@@ -74,7 +75,7 @@ public class LoginActivity extends Activity {
         try {
             new RequestSender(getApplicationContext(), new ResponseHandler() {
                 @Override
-                public boolean recivedResponse(String response) {
+                public boolean onResponse(String response) {
                     Log.e("LOGN", "LOGIN response: " + response);
                     done();
                     return false;
@@ -98,9 +99,9 @@ public class LoginActivity extends Activity {
                     "registerGCM - successfully registered with GCM server - regId: "
                             + registerId);
         } else {
-            Toast.makeText(getApplicationContext(),
-                    "RegId already available. RegId: " + registerId,
-                    Toast.LENGTH_LONG).show();
+            Log.d(
+                    "already RegId: ", registerId
+            );
             done();
         }
         return registerId;
@@ -160,9 +161,8 @@ public class LoginActivity extends Activity {
 
             @Override
             protected void onPostExecute(Object o) {
-                Toast.makeText(getApplicationContext(),
-                        "Registered with GCM Server." + o, Toast.LENGTH_LONG)
-                        .show();
+                Log.d("Registered. ",  o + "");
+
 
                 registerAtServer();
             }
@@ -196,8 +196,7 @@ public class LoginActivity extends Activity {
 
             @Override
             protected void onPostExecute(Object result) {
-                Toast.makeText(getApplicationContext(), result + "",
-                        Toast.LENGTH_LONG).show();
+                Log.d("Login Activuty 199", result + "");
 
             }
 
@@ -206,8 +205,9 @@ public class LoginActivity extends Activity {
     }
 
     private void done() {
-        SharedPreferences.Editor editor = getSharedPreferences("credentials", Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = getSharedPreferences(Config.PreferencesName, Context.MODE_PRIVATE).edit();
         editor.putString("phone", String.valueOf(phone.getText()));
+        editor.putString("user", String.valueOf(user.getText()));
         editor.commit();
         finish();
     }

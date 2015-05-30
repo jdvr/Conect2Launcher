@@ -9,4 +9,5 @@ public class Config {
     public static final String MESSAGE_KEY = "message";
     public static final String REG_ID = "regId";
     public static final String APP_VERSION = "appVersion";
+    public static final String PreferencesName = "credentials";
 }
