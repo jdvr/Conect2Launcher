@@ -19,12 +19,13 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import es.juandavidvega.conect2app.launcher.Config;
 import es.juandavidvega.conect2app.launcher.R;
 import es.juandavidvega.conect2app.launcher.adapter.AppsAdapter;
 import es.juandavidvega.conect2app.launcher.appsmanager.AppStarter;
 import es.juandavidvega.conect2app.launcher.widgets.AppsWidget;
 import es.juandavidvega.conect2app.launcher.widgets.ClockWidget;
-import es.juandavidvega.conect2app.launcher.widgets.Widget;
+import es.juandavidvega.conect2app.launcher.widgets.DateWidget;
 import es.juandavidvega.conect2app.launcher.widgets.WidgetContainer;
 import es.juandavidvega.conect2app.models.connect.model.Item;
 import es.juandavidvega.conect2app.models.connect.view.SerializableConfiguration;
@@ -36,7 +37,9 @@ public class HomeConfigurator implements Configurator {
 
     private Configurable configurable;
     private WidgetContainer widgetForConfigurable;
-
+    private AppsWidget appsWidget;
+    private ClockWidget clockWidget;
+    private DateWidget dateWidget;
 
     public HomeConfigurator(Configurable configurableActivity) {
         this.configurable = configurableActivity;
@@ -53,14 +56,23 @@ public class HomeConfigurator implements Configurator {
 
     @Override
     public void update(SerializableConfiguration newData) {
+        updateClock(newData.clock());
+        updateDate(newData.date());
         updateApps(newData.getItems());
     }
 
+    private void updateDate(boolean date) {
+        dateWidget.setVisibility(date);
+    }
+
+    private void updateClock(boolean clock) {
+        clockWidget.setVisibility(clock);
+    }
+
     private void updateApps(Item[] items) {
-        AppsWidget widget = getAppsWidget();
-        widget.getAppsAdpater().setApps(bindItemToAppPreview(items));
-        widget.setItemClickListener(new AppClickListener(widget.getAppsAdpater()));
-        widget.getAppsAdpater().notifyDataSetChanged();
+        appsWidget.getAppsAdpater().setApps(bindItemToAppPreview(items));
+        appsWidget.setItemClickListener(new AppClickListener(appsWidget.getAppsAdpater()));
+        appsWidget.getAppsAdpater().notifyDataSetChanged();
 
     }
 
@@ -80,7 +92,9 @@ public class HomeConfigurator implements Configurator {
 
     private void addWidgets() {
         addClockWidget();
+        addDateWidget();
         addAppsWidget();
+
     }
 
     private void addAppsWidget() {
@@ -89,15 +103,39 @@ public class HomeConfigurator implements Configurator {
         apps.getAppsAdpater().setApps(new CustomAppsLoader().load());
         apps.loadAppsGrid();
         apps.setItemClickListener(new AppClickListener(apps.getAppsAdpater()));
-        widgetForConfigurable.add(apps);
+        appsWidget = apps;
+        widgetForConfigurable.add(appsWidget);
     }
 
     private void addClockWidget() {
         ClockWidget clock = new ClockWidget((TextView) configurable.findViewById(R.id.tv_hour),
                 (TextView) configurable.findViewById(R.id.tv_minutes_seg));
         new Timer().schedule(getClockTask(new Handler(), clock), 0, 1000);
-        widgetForConfigurable.add(clock);
+        clockWidget = clock;
+        widgetForConfigurable.add(clockWidget);
 
+    }
+
+    private void addDateWidget() {
+        DateWidget date = new DateWidget((TextView) configurable.findViewById(R.id.tv_date));
+        new Timer().schedule(getDateTask(new Handler(), date), 0, Config.EveryDay);
+        dateWidget = date;
+        widgetForConfigurable.add(dateWidget);
+
+    }
+
+    private TimerTask getDateTask(final Handler handler, final DateWidget date) {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        date.update();
+                    }
+                });
+            }
+        };
     }
 
     private TimerTask getClockTask(final Handler handler, final ClockWidget clock) {
@@ -116,12 +154,6 @@ public class HomeConfigurator implements Configurator {
                 });
             }
         };
-    }
-
-    private AppsWidget getAppsWidget() {
-        for (Widget widget : widgetForConfigurable.getWidgets())
-            if (widget instanceof AppsWidget) return (AppsWidget) widget;
-        return null;
     }
 
     private List<AppPreview> bindItemToAppPreview(Item[] items) {

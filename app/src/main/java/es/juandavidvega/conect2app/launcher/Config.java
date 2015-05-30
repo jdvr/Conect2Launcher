@@ -10,4 +10,5 @@ public class Config {
     public static final String REG_ID = "regId";
     public static final String APP_VERSION = "appVersion";
     public static final String PreferencesName = "credentials";
+    public static long EveryDay = 24 * 60 * 60 * 1000;
 }
