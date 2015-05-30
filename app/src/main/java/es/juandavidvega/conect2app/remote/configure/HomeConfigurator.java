@@ -1,5 +1,7 @@
 package es.juandavidvega.conect2app.remote.configure;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -7,10 +9,13 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+
+import org.json.JSONException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,6 +34,9 @@ import es.juandavidvega.conect2app.launcher.widgets.DateWidget;
 import es.juandavidvega.conect2app.launcher.widgets.WidgetContainer;
 import es.juandavidvega.conect2app.models.connect.model.Item;
 import es.juandavidvega.conect2app.models.connect.view.SerializableConfiguration;
+import es.juandavidvega.conect2app.remote.interoperability.RequestSender;
+import es.juandavidvega.conect2app.remote.interoperability.ResponseHandler;
+import es.juandavidvega.conect2app.remote.interoperability.SendDataRequest;
 import es.juandavidvega.conect2app.remote.model.AppPreview;
 import es.juandavidvega.conect2app.remote.persistence.CustomAppsLoader;
 
@@ -40,6 +48,7 @@ public class HomeConfigurator implements Configurator {
     private AppsWidget appsWidget;
     private ClockWidget clockWidget;
     private DateWidget dateWidget;
+    private SerializableConfiguration serializableConfiguration;
 
     public HomeConfigurator(Configurable configurableActivity) {
         this.configurable = configurableActivity;
@@ -91,16 +100,31 @@ public class HomeConfigurator implements Configurator {
     }
 
     private void addWidgets() {
-        addClockWidget();
-        addDateWidget();
-        addAppsWidget();
+        SharedPreferences sharedPreferences = configurable.getSharedPreferences(Config.PreferencesName, Context.MODE_PRIVATE);
+        try {
+
+            new RequestSender(configurable, new ResponseHandler() {
+                @Override
+                public boolean onResponse(String response) {
+                    serializableConfiguration = new Gson().fromJson(response, SerializableConfiguration.class);
+                    addClockWidget();
+                    addDateWidget();
+                    addAppsWidget();
+                    return true;
+                }
+            }).readConfiguration(sharedPreferences.getString("user", null),
+                    sharedPreferences.getString("phone", null));
+        } catch (JSONException e) {
+            Log.e("HomeConfigurator", e.getMessage());
+        }
+
 
     }
 
     private void addAppsWidget() {
         final AppsWidget apps = new AppsWidget((GridView) configurable.findViewById(R.id.gv_apps),
                 new AppsAdapter(configurable.getApplicationContext(), R.layout.app_preview));
-        apps.getAppsAdpater().setApps(new CustomAppsLoader().load());
+        apps.getAppsAdpater().setApps(bindItemToAppPreview(serializableConfiguration.getItems()));
         apps.loadAppsGrid();
         apps.setItemClickListener(new AppClickListener(apps.getAppsAdpater()));
         appsWidget = apps;
@@ -112,6 +136,7 @@ public class HomeConfigurator implements Configurator {
                 (TextView) configurable.findViewById(R.id.tv_minutes_seg));
         new Timer().schedule(getClockTask(new Handler(), clock), 0, 1000);
         clockWidget = clock;
+        clockWidget.setVisibility(serializableConfiguration.clock());
         widgetForConfigurable.add(clockWidget);
 
     }
@@ -120,6 +145,7 @@ public class HomeConfigurator implements Configurator {
         DateWidget date = new DateWidget((TextView) configurable.findViewById(R.id.tv_date));
         new Timer().schedule(getDateTask(new Handler(), date), 0, Config.EveryDay);
         dateWidget = date;
+        dateWidget.setVisibility(serializableConfiguration.date());
         widgetForConfigurable.add(dateWidget);
 
     }

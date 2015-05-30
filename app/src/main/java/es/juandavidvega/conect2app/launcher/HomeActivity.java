@@ -102,6 +102,6 @@ public class HomeActivity extends Configurable {
     }
 
     public String getUser() {
-        return getSharedPreferences("credentials", Context.MODE_PRIVATE).getString("phone", null);
+        return getSharedPreferences(Config.PreferencesName, Context.MODE_PRIVATE).getString("phone", null);
     }
 }
