@@ -53,4 +53,10 @@ public class ClockWidget implements Widget{
     private void updateField(TextView field, DateFormat format) {
         field.setText(format.format(lastDate));
     }
+
+    public void setVisibility(boolean visibility) {
+        int newVisibility = visibility ? View.VISIBLE : View.GONE;
+        hour.setVisibility(newVisibility);
+        minutes.setVisibility(newVisibility);
+    }
 }
