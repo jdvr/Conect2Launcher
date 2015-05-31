@@ -24,7 +24,7 @@ public class RequestSender {
     private Context context;
     private ResponseHandler responseHandler;
     //private String BaseURL = "http://juandavidvega.es:8080/connectdev/";
-    private String BaseURL = "http://192.168.56.1:8080/";
+    public static final String BaseURL = "http://192.168.56.1:8080/";
 
     public RequestSender(Context context, ResponseHandler responseHandler) {
         this.context = context;

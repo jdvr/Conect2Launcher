@@ -39,6 +39,7 @@ import es.juandavidvega.conect2app.remote.interoperability.ResponseHandler;
 import es.juandavidvega.conect2app.remote.interoperability.SendDataRequest;
 import es.juandavidvega.conect2app.remote.model.AppPreview;
 import es.juandavidvega.conect2app.remote.persistence.CustomAppsLoader;
+import es.juandavidvega.conect2app.utils.ImageUtils;
 
 
 public class HomeConfigurator implements Configurator {
@@ -65,9 +66,15 @@ public class HomeConfigurator implements Configurator {
 
     @Override
     public void update(SerializableConfiguration newData) {
+        Log.e("update", newData + "");
+        if (widgetAreNull() || newData == null) return;
         updateClock(newData.clock());
         updateDate(newData.date());
         updateApps(newData.getItems());
+    }
+
+    private boolean widgetAreNull() {
+        return clockWidget == null || dateWidget == null || appsWidget == null;
     }
 
     private void updateDate(boolean date) {
@@ -185,7 +192,7 @@ public class HomeConfigurator implements Configurator {
     private List<AppPreview> bindItemToAppPreview(Item[] items) {
         List<AppPreview> apps = new ArrayList<>();
         for (Item item : items) {
-            apps.add(new AppPreview(item.getId(), item.getIconURL(), item.getType().toString()));
+            apps.add(new AppPreview(item.getId(), ImageUtils.getAbsoluteURL(item.getIconURL()), item.getType().toString()));
         }
         return apps;
     }
